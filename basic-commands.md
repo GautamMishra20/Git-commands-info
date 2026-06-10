@@ -1,12 +1,12 @@
 # Basic Git Commands
 
-These are the essential commands you will use every day when working with Git.
+These ara the fundamental Git commands that you'll use regularly while managing and tracking your projects.
 
 ---
 
-## git init - Start Tracking a Folder
+## git init - Create a Git Repository
 
-This command turns a normal folder into a Git repository. Run it once inside the folder you want to track.
+This command initializes Git in an existing folder, allowing Git to start tracking changes within that project.
 
 ```bash
 # Navigate to your project folder
@@ -26,7 +26,7 @@ Initialized empty Git repository in /school-project/.git/
 
 ---
 
-## git status - Check What Changed
+## git status - View Repository Status
 
 This is the command you will use most often. It shows:
 
@@ -41,20 +41,20 @@ git status
 
 ---
 
-## git add - Stage Your Changes
+## git add - Prepare Changes for Commit
 
 Move files from the **Working Directory** to the **Staging Area**.
 
 ### Stage a Specific File
 
 ```bash
-git add filename.txt
+git add <file_name>
 ```
 
 ### Stage Multiple Files
 
 ```bash
-git add file1.txt file2.txt
+git add main.py app.py
 ```
 
 ### Stage All Changed Files
@@ -65,20 +65,20 @@ git add .
 
 ---
 
-## git commit - Save a Snapshot
+## git commit - Record Changes Permanently
 
-Save all staged files permanently with a message describing what changed.
+A commit creates a snapshot of all staged changes, allowing you to save your work and maintain a history of updates.
 
 ```bash
-git commit -m "Your message here"
+git commit -m "messages that is relevant to the changes or commited file"
 ```
 
-### Good Commit Messages
+### Examples of clear Commit Messages
 
 ```bash
 git commit -m "Add login page"
-git commit -m "Fix score calculation bug"
-git commit -m "Update homepage design"
+git commit -m "Fix bug"
+git commit -m "Update design"
 ```
 
 ### Avoid
@@ -137,7 +137,7 @@ git diff --staged
 
 ---
 
-# Complete Example: Gian's First Day
+# Example: First Day at school
 
 ```bash
 # Create project folder
