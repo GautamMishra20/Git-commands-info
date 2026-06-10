@@ -43,7 +43,7 @@ git status
 
 ## git add - Prepare Changes for Commit
 
-Move files from the **Working Directory** to the **Staging Area**.
+Move files from the **Working Directory** to the **Staging Area** to ready for commit the file.
 
 ### Stage a Specific File
 
