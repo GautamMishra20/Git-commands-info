@@ -1,6 +1,6 @@
 # Basic Git Commands
 
-These ara the fundamental Git commands that you'll use regularly while managing and tracking your projects.
+These are the fundamental Git commands that you'll use regularly while managing and tracking your projects.
 
 ---
 
