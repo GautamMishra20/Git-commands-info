@@ -1,29 +1,37 @@
+# Branching, Merging & Merge Conflicts
+
+Git branches allow developers to work on features, bug fixes, and experiments independently without affecting the main codebase. Once the work is complete, branches can be merged back into the primary branch.
+
+---
+
 # Understanding Branches
 
-Branches allow developers to work on different tasks independently without affecting the primary codebase. They are one of Git's most important features for managing development workflows.
+A branch is an independent line of development within a Git repository.
+
+Instead of making changes directly on the main branch, developers typically create feature branches where they can safely develop and test new functionality.
 
 ---
 
-# Why Branches Matter
+## Why Use Branches?
 
-In a software project, the main branch often contains the stable version of the application.
+Branches help to:
 
-When developing a new feature, fixing bugs, or experimenting with changes, working directly on the main branch can introduce problems into the stable code.
-
-Branches provide an isolated workspace where changes can be developed and tested safely before being integrated into the main project.
+- Keep the main branch stable.
+- Develop features independently.
+- Work on multiple tasks simultaneously.
+- Reduce the risk of breaking production code.
+- Enable collaboration among team members.
 
 ---
 
-# How Branches Work
-
-Consider a repository with several commits on the main branch.
+## Branch Structure
 
 ```text
 main:
 A --- B --- C --- D
 ```
 
-A new feature branch is created from the latest commit.
+Creating a feature branch:
 
 ```text
 main:
@@ -32,39 +40,25 @@ A --- B --- C --- D
                 E --- F
 ```
 
-Development continues on the feature branch without affecting the main branch.
-
-Once the work is completed and tested, the branch can be merged back.
+After merging:
 
 ```text
 A --- B --- C --- D --- G
-               \         /
-                E ----- F
+               \       /
+                E --- F
 ```
-
-This allows the main branch to remain stable throughout development.
 
 ---
 
-# Creating a Branch
-
-Create a new branch:
+## Creating a Branch
 
 ```bash
 # Create a new branch
 git branch feature-login
-```
 
-Switch to the branch:
-
-```bash
 # Switch to that branch
 git checkout feature-login
-```
 
-Create and switch in a single command:
-
-```bash
 # Or do both in one command
 git checkout -b feature-login
 ```
@@ -77,48 +71,36 @@ Switched to a new branch 'feature-login'
 
 ---
 
-# Viewing Available Branches
-
-Display all local branches:
+## View Available Branches
 
 ```bash
 git branch
 ```
 
-Example output:
+Example:
 
 ```text
   main
 * feature-login
 ```
 
-> The `*` symbol identifies the branch currently in use.
+> The `*` symbol indicates the currently active branch.
 
 ---
 
-# Switching Between Branches
-
-Move to the main branch:
+## Switching Between Branches
 
 ```bash
 # Switch to main branch
 git checkout main
-```
 
-Move back to the feature branch:
-
-```bash
 # Switch to feature branch
 git checkout feature-login
 ```
 
-Git automatically updates the working directory to match the selected branch.
-
 ---
 
-# Example Workflow
-
-The following example demonstrates a typical feature development process.
+## Example Workflow
 
 ```bash
 # Start from the main branch
@@ -141,91 +123,358 @@ git add login.txt
 git commit -m "Complete login functionality"
 ```
 
-View the commit history for the branch:
+View commit history:
 
 ```bash
 git log --oneline
 ```
 
-Example output:
+Example:
 
 ```text
 f3e2d1c Complete login functionality
 a9b8c7d Add login page
-5h4i3j2 (main) Previous main commit
+5h4i3j2 Previous main commit
 ```
-
-Switch back to the main branch:
-
-```bash
-git checkout main
-```
-
-The files that exist only on the feature branch are no longer visible.
-
-Return to the feature branch:
-
-```bash
-git checkout feature-login
-```
-
-The feature branch files become available again.
 
 ---
 
-# Deleting Branches
-
-After a branch has served its purpose, it can be removed.
-
-Delete a merged branch:
+## Deleting Branches
 
 ```bash
 # Delete a branch (after merging)
 git branch -d feature-login
-```
 
-Force deletion:
-
-```bash
 # Force delete (even if not merged)
 git branch -D feature-login
 ```
 
-> Use force deletion carefully, as unmerged work may be lost.
+---
+
+# Merging Branches
+
+Merging combines changes from one branch into another.
+
+Typically, feature branches are merged back into the main branch after development is complete.
 
 ---
 
-# Typical Branch Structure
+## Repository Setup
 
-A project may contain several branches dedicated to different tasks.
+```bash
+mkdir git-merge-demo
+cd git-merge-demo
+git init
 
-```text
-main
-├── feature-login
-├── feature-ui-design
-├── feature-database
-└── feature-api
+# Create the first file and make the initial commit
+echo "Initial Code" > app.txt
+git add .
+git commit -m "initial commit"
 ```
 
-Each branch focuses on a specific piece of work, making development more organized and reducing the risk of conflicts.
+---
+
+# Fast-Forward Merge
+
+A fast-forward merge occurs when the target branch has not changed since the feature branch was created.
+
+Before:
+
+```text
+main:     A
+           \
+feature:    B --- C
+```
+
+After:
+
+```text
+main:     A --- B --- C
+```
+
+### Example
+
+```bash
+# Step 1: Create and switch to feature branch
+git switch -c feature
+
+# Step 2: Create a new file and commit
+echo "Feature Code" > feature.txt
+git add .
+git commit -m "added feature file"
+
+# Step 3: Switch back to main
+git switch main
+
+# Step 4: Merge
+git merge feature
+```
 
 ---
 
-# Benefits of Using Branches
+# Three-Way Merge
 
-- Keep the main branch stable.
-- Develop features independently.
-- Test changes before integration.
-- Allow multiple developers to work simultaneously.
-- Organize work into separate tasks or features.
+A three-way merge occurs when both branches contain new commits.
+
+Before:
+
+```text
+main:          A --- B --- C
+                        \
+feature:                  D
+```
+
+After:
+
+```text
+main:          A --- B --- C --- M
+                        \       /
+feature:                  D ---
+```
+
+### Example
+
+```bash
+# Step 1: Create login-feature branch
+git switch -c login-feature
+
+# Step 2: Add a file on the feature branch
+echo "Login Feature" > login.txt
+git add .
+git commit -m "added login"
+
+# Step 3: Switch back to main and add a different file
+git switch main
+echo "Main Update" > main.txt
+git add .
+git commit -m "main updated"
+
+# Step 4: Merge with -m to avoid Vim editor
+git merge login-feature -m "three way merge completed"
+```
+
+---
+
+# Squash Merge
+
+A squash merge combines all feature branch commits into a single commit.
+
+### Example
+
+```bash
+# Step 1: Create ui-feature branch
+git switch -c ui-feature
+
+# Step 2: Make multiple commits
+echo "Navbar" > navbar.txt
+git add .
+git commit -m "navbar added"
+
+echo "Footer" > footer.txt
+git add .
+git commit -m "footer added"
+
+echo "Sidebar" > sidebar.txt
+git add .
+git commit -m "sidebar added"
+
+# Step 3: Switch to main
+git switch main
+
+# Step 4: Squash merge (stages all changes but does NOT commit yet)
+git merge --squash ui-feature
+
+# Step 5: Commit manually with one clean message
+git commit -m "UI Feature Complete"
+```
+
+---
+
+# Octopus Merge
+
+Octopus merge allows multiple branches to be merged simultaneously.
+
+### Example
+
+```bash
+# Branch 1: feature-a
+git switch -c feature-a
+echo "A Feature" > a.txt
+git add .
+git commit -m "feature a"
+
+# Branch 2: feature-b
+git switch main
+git switch -c feature-b
+echo "B Feature" > b.txt
+git add .
+git commit -m "feature b"
+
+# Branch 3: feature-c
+git switch main
+git switch -c feature-c
+echo "C Feature" > c.txt
+git add .
+git commit -m "feature c"
+
+# Switch to main and merge all three at once
+git switch main
+git merge feature-a feature-b feature-c -m "octopus merge all features"
+```
+
+---
+
+# Merge Conflicts
+
+A merge conflict occurs when Git cannot automatically combine changes from different branches.
+
+This typically happens when the same section of a file has been modified in multiple branches.
+
+---
+
+## Creating a Conflict
+
+```bash
+# Main branch
+git checkout main
+
+# Edit score.txt, line 1: "Total Score: 100"
+git add score.txt
+git commit -m "Set score to 100"
+
+# Feature branch
+git checkout -b feature-scoring
+
+# Edit score.txt, line 1: "Total Score: 200"
+git add score.txt
+git commit -m "Set score to 200"
+
+# Try to merge
+git checkout main
+git merge feature-scoring
+```
+
+Output:
+
+```text
+Auto-merging score.txt
+CONFLICT (content): Merge conflict in score.txt
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+---
+
+## Conflict Markers
+
+Git inserts markers inside the file:
+
+```text
+<<<<<<< HEAD
+Total Score: 100
+=======
+Total Score: 200
+>>>>>>> feature-scoring
+```
+
+### Meaning
+
+| Marker                    | Description             |
+| ------------------------- | ----------------------- |
+| `<<<<<<< HEAD`            | Current branch version  |
+| `=======`                 | Separator               |
+| `>>>>>>> feature-scoring` | Incoming branch version |
+
+---
+
+## Resolving a Conflict
+
+Open the file and choose the final content.
+
+Example:
+
+```text
+Total Score: 200
+```
+
+Remove all conflict markers and save the file.
+
+Stage the resolved file:
+
+```bash
+git add score.txt
+```
+
+Complete the merge:
+
+```bash
+git commit -m "Resolve merge conflict - use score 200"
+```
+
+---
+
+## Check Conflicted Files
+
+```bash
+git status
+```
+
+Example:
+
+```text
+Unmerged paths:
+  both modified: score.txt
+```
+
+---
+
+## Cancel a Merge
+
+If you want to stop the merge process:
+
+```bash
+git merge --abort
+```
+
+---
+
+# Conflict Resolution Workflow
+
+```text
+Create Branch
+      ↓
+Make Changes
+      ↓
+Merge Branches
+      ↓
+Conflict Detected
+      ↓
+Open File
+      ↓
+Resolve Conflict
+      ↓
+git add
+      ↓
+git commit
+```
+
+---
+
+# Merge Comparison Table
+
+| Merge Type   | Merge Commit Created?  | Command                      |
+| ------------ | ---------------------- | ---------------------------- |
+| Fast Forward | No                     | `git merge feature`          |
+| Three-Way    | Yes                    | `git merge feature -m "msg"` |
+| Squash       | One Clean Commit       | `git merge --squash feature` |
+| Octopus      | Yes (Multiple Parents) | `git merge a b c -m "msg"`   |
 
 ---
 
 # Summary
 
-Branches create isolated environments for development.
+Git branches allow isolated development, merging combines completed work, and merge conflicts occur when Git cannot automatically determine which changes should be kept.
 
-Common workflow:
+Basic workflow:
 
 ```text
 Create Branch
@@ -234,9 +483,9 @@ Make Changes
       ↓
 Commit Changes
       ↓
-Switch Branches
+Merge Branch
       ↓
-Merge When Ready
+Resolve Conflicts (if any)
+      ↓
+Continue Development
 ```
-
-By using branches effectively, teams can develop new features, fix bugs, and experiment with ideas without affecting the stable version of the project.
